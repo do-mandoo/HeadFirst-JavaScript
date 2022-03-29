@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ch12</title>
+    <script type="text/javascript" src="ajax.js"></script>
+    <script type="text/javascript" src="date.js"></script>
+
+    <script type="text/javascript">
+      function loadBlog() {}
+    </script>
+  </head>
+  <body onload="loadBlog();">
+    <h3>YouCube - The Blog for Cube Puzzlers</h3>
+    <img src="cube.png" alt="YouCube" />
+    <input
+      type="button"
+      id="search"
+      value="Search the Blog"
+      disabled="disabled"
+      onclick="searchBlog();"
+    />
+    <input type="text" id="searchtext" name="searchtext" value="" />
+    <div id="blog"></div>
+    <input
+      type="button"
+      id="showall"
+      value="Show All Blog Entries"
+      disabled="disabled"
+      onclick="showBlog();"
+    />
+    <input
+      type="button"
+      id="viewrandom"
+      value="View a Random Blog Entry"
+      disabled="disabled"
+      onclick="randomBlog();"
+    />
+  </body>
+</html>
