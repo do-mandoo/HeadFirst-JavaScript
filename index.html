@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/javascript">
+      // ES6문법으로 바꿈. var대신 const사용
+      const touchRock = () => {
+        const userName = prompt('What is your name?', 'Enter your name here');
+        if (userName) {
+          alert('It is good to meet you ' + userName + '.');
+          document.getElementById('rockimg').src = './images/smileROCK.png';
+        }
+      };
+      // ES6 이전 문법. var사용
+      function touchRock1() {
+        var userName1 = prompt('What is your name?', 'Enter your name here');
+        if (userName1) {
+          alert('It is good to meet you ' + userName1 + '!');
+          document.getElementById('rockimg').src = 'smileROCK.png';
+        }
+      }
+    </script>
+  </head>
+  <body onload="alert('Hello, i am your pet rock');">
+    <div style="margin-top: 100p; text-align: center">
+      <img
+        id="rockimg"
+        src="./images/boringROCK.png"
+        alt="irock"
+        style="cursor: pointer"
+        onclick="touchRock()"
+      />
+    </div>
+  </body>
+</html>

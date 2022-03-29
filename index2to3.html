@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      let userName;
+
+      function greetUser() {
+        alert('Hello, I am your pet rock.');
+      }
+
+      function touchRock() {
+        if (userName) {
+          alert('I like the attention,' + userName + '.Thank you.');
+        } else {
+          userName = prompt('What is your name?', 'Enter your name here.');
+          if (userName) {
+            alert('It is good to meet you,' + userName + '.');
+          }
+        }
+        document.getElementById('rockimg').src = './images/smileROCK.png';
+        setTimeout(() => {
+          document.getElementById('rockimg').src = './images/boringROCK.png';
+        }, 5000);
+      }
+
+      function resizeRock() {
+        document.getElementById('rockimg').style.height = (document.body.clientHeight - 100) * 0.9;
+      }
+    </script>
+  </head>
+  <body onload="resizeRock(); greetUser()" onresize="resizeRock()">
+    <div style="margin-top: 100px; text-align: center">
+      <img
+        id="rockimg"
+        src="./images/boringROCK.png"
+        alt="irock"
+        style="cursor: pointer"
+        onclick="touchRock()"
+      />
+    </div>
+  </body>
+</html>
