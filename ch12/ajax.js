@@ -1,69 +1,72 @@
-// AjaxRequest object constructor
+// AjaxRequest 객체 생성자
 function AjaxRequest() {
-  // Try the XMLHttpRequest object first
+  // 먼저 XMLHttpRequest를 시도.
   if (window.XMLHttpRequest) {
     try {
       this.request = new XMLHttpRequest();
-    } catch(e) {
+    } catch (e) {
       this.request = null;
     }
-  // Now try the ActiveX (IE) version
+    // ActiveX(IE) 버전에서 시도 -> 크로스브라우저 오..
   } else if (window.ActiveXObject) {
     try {
-      this.request = new ActiveXObject("Msxml2.XMLHTTP");
-    // Try the older ActiveX object for older versions of IE
-    } catch(e) {
+      this.request = new ActiveXObject('Msxml2.XMLHTTP');
+      // 예전 버전의 IE를 위해 예전 버전의 ActiveX에서 시도. -> 오..
+    } catch (e) {
       try {
-        this.request = new ActiveXObject("Microsoft.XMLHTTP");
-      } catch(e) {
+        this.request = new ActiveXObject('Microsoft.XMLHTTP');
+      } catch (e) {
         this.request = null;
       }
     }
   }
 
-  // If the request creation failed, notify the user
-  if (this.request == null)
-    alert("Ajax error creating the request.\n" + "Details: " + e);
+  // 요청 작성에 실패했을 경우 사용자에게 통지한다.
+  if (this.request == null) alert('Ajax error creating the request.\n' + 'Details: ' + e);
 }
 
-// Send an Ajax request to the server
-AjaxRequest.prototype.send = function(type, url, handler, postDataType, postData) {
+// 서버에 Ajax요청 보내기
+AjaxRequest.prototype.send = function (type, url, handler, postDataType, postData) {
   if (this.request != null) {
-    // Kill the previous request
+    // 이전 요청을 없앰
     this.request.abort();
 
-    // Tack on a dummy parameter to override browser caching
-    url += "?dummy=" + new Date().getTime();
+    // 브라우저 캐시(캐쉬)를 오버라이드하기 위해 더미 파라미터로 고정.
+    url += '?dummy=' + new Date().getTime();
 
     try {
+      // 요청에 대해 서버가 응답할 때 호출되는 사용자 정의 함수이다.
       this.request.onreadystatechange = handler;
-      this.request.open(type, url, true); // always asynchronous (true)
-      if (type.toLowerCase() == "get") {
-        // Send a GET request; no data involved
-        this.request.send(null);
+
+      // 요청을 오픈하는것은 전송할 준비가 되어있다는 것. 또한 요청의 종류(GET,POST)가 무엇인지도 결정함.
+      this.request.open(type, url, true); // 항상 비동기적임(true)
+
+      if (type.toLowerCase() == 'get') {
+        // GET요청을 전송: 포함된 데이터는 null로 없음을 뜻함.
+        this.request.send(null); // GET요청 부분
       } else {
-        // Send a POST request; the last argument is data
-        this.request.setRequestHeader("Content-Type", postDataType);
-        this.request.send(postData);
+        // POST요청을 전송: 마지막 인수가 데이터이다.
+        this.request.setRequestHeader('Content-Type', postDataType);
+        this.request.send(postData); // POST요청 부분
       }
-    } catch(e) {
-      alert("Ajax error communicating with the server.\n" + "Details: " + e);
+    } catch (e) {
+      alert('Ajax error communicating with the server.\n' + 'Details: ' + e);
     }
   }
-}
+};
 
-AjaxRequest.prototype.getReadyState = function() {
+AjaxRequest.prototype.getReadyState = function () {
   return this.request.readyState;
-}
+};
 
-AjaxRequest.prototype.getStatus = function() {
+AjaxRequest.prototype.getStatus = function () {
   return this.request.status;
-}
+};
 
-AjaxRequest.prototype.getResponseText = function() {
+AjaxRequest.prototype.getResponseText = function () {
   return this.request.responseText;
-}
+};
 
-AjaxRequest.prototype.getResponseXML = function() {
+AjaxRequest.prototype.getResponseXML = function () {
   return this.request.responseXML;
-}
+};

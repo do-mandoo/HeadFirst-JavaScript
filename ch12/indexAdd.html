@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/javascript" src="ajax.js"></script>
+    <script type="text/javascript" src="date.js"></script>
+
+    <script type="text/javascript">
+      // Global Ajax request
+      var ajaxReq = new AjaxRequest();
+
+      // Ajax를 사용하여 서버의 XML 문서에 새 블로그 항목 추가.
+      function addBlogEntry() {
+        // Add 버튼을 비활성화시키고 상태가 바쁘다고 설정.
+        document.getElementById('add').disabled = true;
+        document.getElementById('status').innerHTML = 'Adding...';
+
+        // Ajax 요청으로 새로운 블로그 항목을 전송
+        ajaxReq.send(
+          'POST',
+          'addblogentry.php',
+          handleRequest,
+          'application/x-www-form-urlencoded; charset=UTF-8',
+          'date=' +
+            document.getElementById('date').value +
+            '&body=' +
+            document.getElementById('body').value +
+            '&image=' +
+            document.getElementById('image').value
+        );
+      }
+
+      // Ajax요청을 처리.
+      function handleRequest() {
+        if (ajaxReq.getReadyState() == 4 && ajaxReq.getStatus() == 200) {
+          // Add버튼을 활성화하고 상태를 초기화
+          document.getElementById('add').disabled = false;
+          document.getElementById('status').innerHTML = '';
+
+          // 블로그 항목이 추가된 것을 확인
+          alert('The new blog entry was successfully added.');
+        }
+      }
+
+      // 블로그 폼 전체 초기화
+      function initForm() {
+        document.getElementById('date').value = new Date().shortFormat();
+        document.getElementById('body').focus();
+      }
+    </script>
+  </head>
+  <body onload="initForm();">
+    <h3>YouCube - Adding to the Blog for Cube Puzzlers</h3>
+    Date: <input type="text" id="date" name="date" value="" size="10" /><br />
+    Body: <input type="text" id="body" name="body" value="" size="60" /><br />
+    Image (optional): <input type="text" id="image" name="image" value="" size="20" /><br />
+    <input type="button" id="add" value="Add the New Blog Entry" onclick="addBlogEntry();" /><br />
+    <div id="status"></div>
+  </body>
+</html>

@@ -9,7 +9,135 @@
     <script type="text/javascript" src="date.js"></script>
 
     <script type="text/javascript">
-      function loadBlog() {}
+      // 중복되는 날짜 서식화코드를 함수로 빼내기.
+      Date.prototype.shortFormat = function () {
+        return this.getMonth() + 1 + '/' + this.getDate() + '/' + this.getFullYear();
+      };
+
+      // Blog 오브젝트 생성자
+      function Blog(body, date, image) {
+        // 프로퍼티 설정
+        // Blog()생성자가 두 개의 블로그 프로퍼티들을 생성하고 있다.
+        this.body = body;
+        this.date = date;
+        this.image = image;
+      }
+
+      // 함수를 메소드로 변환하기
+      // 블로그항목을 표현하는 문자열반환
+      Blog.prototype.toString = function () {
+        return '[' + this.date.shortFormat() + '] ' + this.body;
+      };
+      // 블로그 항목을 표현하는 서식화된 HTML반환
+      Blog.prototype.toHTML = function (highlight) {
+        // 밝아보이도록 회색 배경색을 사용
+        let blogHTML = '';
+        blogHTML += highlight ? "<p style='background-color:#EEEEEE'>" : '<p>';
+
+        // image보여주기
+        if (this.image) {
+          blogHTML +=
+            '<strong>' +
+            this.date.shortFormat() +
+            "</strong><br /><table><tr><td><img src='" +
+            this.image +
+            "'/></td><td style='vertical-align:top'>" +
+            this.body +
+            '</td></tr></table><em>' +
+            this.signature +
+            '</em></p>';
+        } else {
+          blogHTML +=
+            '<strong>' +
+            this.date.shortFormat() +
+            '</strong><br />' +
+            this.body +
+            '<br /><em>' +
+            this.signature +
+            '</em></p>';
+        }
+        /* 
+        // 서식화된 블로그 HTML코드를 생성
+        blogHTML += '<strong>' + this.date.shortFormat() + '</strong><br />' + this.body + '</p>'; */
+        return blogHTML;
+      };
+      // this.containsText에 함수 리터럴을 할당함으로써 Blog()생성자에서 생성되는 형태로 Blog 객체의 containsText()메소드에 대한 코드.
+      // === 블로그 본문이 검색 문자열을 포함하고 있는지 체크. 포함하고 있다면 true를 반환하고, 그렇지 않으면 false를 반환.
+      Blog.prototype.containsText = function (text) {
+        return this.body.toLowerCase().indexOf(text.toLowerCase()) != -1;
+      };
+      // 블로그 싸인 설정
+      Blog.prototype.signature = 'by Puzzler Ruby';
+      // 정렬 비교 함수 를 blogSorter()란 이름의 Blog객체의 클래스메소드로 다시 작성함.
+      Blog.blogSorter = function (blog1, blog2) {
+        return blog2.date - blog1.date;
+      };
+
+      // --------------------
+      // Ajax를 사용하여 서버의 XML 문서에서 블로그 로드.
+      function loadBlog() {
+        document.getElementById('blog').innerHTML = "<img src='wait.gif' alt='Loading...' />";
+        ajaxReq.send('GET', 'blog.xml', handleRequest);
+      }
+
+      // Ajax 요청 처리
+      function handleRequest() {
+        if (ajaxReq.getReadyState() == 4 && ajaxReq.getStatus() == 200) {
+          // XML데이터 저장
+          var xmlData = ajaxReq.getResponseXML().getElementsByTagName('blog')[0];
+
+          // 블로그 전체에 싸인을 설정함.
+          Blog.prototype.signature = 'by ' + getText(xmlData.getElementsByTagName('author')[0]);
+
+          // BLOG항목 오브젝트 배열을 생성.
+          var entries = xmlData.getElementsByTagName('entry');
+          for (var i = 0; i < entries.length; i++) {
+            // 블로그 항목 생성
+            blog.push(
+              new Blog(
+                getText(entries[i].getElementsByTagName('body')[0]),
+                new Date(getText(entries[i].getElementsByTagName('date')[0])),
+                getText(entries[i].getElementsByTagName('image')[0])
+              )
+            );
+          }
+
+          // 블로그 버튼 활성화.
+          document.getElementById('search').disabled = false;
+          document.getElementById('showall').disabled = false;
+          document.getElementById('viewrandom').disabled = false;
+
+          // 블로그를 최근 올라온 다섯개만 보여줌.
+          showBlog(5);
+        }
+      }
+      // DOM트리에서 엘리먼트(노드)들을 반복해서 모든 컨텐츠를 추출한다.
+      function getText(elem) {
+        let text = '';
+        if (elem) {
+          if (elem.childNodes) {
+            // elem의 자식노드 모두에 대해 루프를 돈다.
+            for (let i = 0; i < elem.childNodes.length; i++) {
+              const child = elem.childNodes[i];
+              if (child.nodeValue) {
+                // text변수에 자식노드의 컨텐츠 추가
+                text += child.nodeValue;
+              } else {
+                if (child.childNodes[0]) {
+                  if (child.childNodes[0].nodeValue) {
+                    // 만약 하나의 자식 노드속에 또다른 자식 노드들이 있다면,
+                    // 첫 번째 자식 노드로부터 텍스트 컨텐츠를 추출한 뒤,
+                    // text변수에 계속해서 다음 자식 노드의 컨텐츠를 덧붙인다.
+                    text += child.childNodes[0].nodeValue;
+                  }
+                }
+              }
+            }
+          }
+        }
+        // text변수를 반환. elem의 모든 자식 노드들의 컨텐츠를 갖고있다.
+        return text;
+      }
     </script>
   </head>
   <body onload="loadBlog();">
