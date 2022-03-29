@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style type="text/css">
+      span {
+        cursor: pointer;
+      }
+      span.decision {
+        font-weight: bold;
+        border: thin solid #000000;
+        padding: 5px;
+        background-color: #dddddd;
+      }
+
+      span.decisionhover {
+        font-weight: bold;
+        border: thin solid #000000;
+        padding: 5px;
+        background-color: #eeeeee;
+      }
+    </style>
+    <script type="text/javascript">
+      // Initialize the current scene to Scene 0 (Intro)
+      let curScene = 0;
+
+      function replaceNodeText(id, newText) {
+        const node = document.getElementById(id);
+        while (node.firstChild) node.removeChild(node.firstChild);
+        node.appendChild(document.createTextNode(newText));
+      }
+
+      function changeScene(decision) {
+        // 메시지 초기화
+        let message = '';
+        let decision1 = '',
+          decision2 = '';
+
+        switch (curScene) {
+          case 0:
+            curScene = 1;
+            message = 'Your journey begins at a fork in the road.';
+            decision1 = 'Take the Path';
+            decision2 = 'Take the Bridge';
+
+            // 두번째 선택을 보여준다.
+            document.getElementById('decision2').style.visibility = 'visible';
+            break;
+          case 1:
+            if (decision == 1) {
+              curScene = 2;
+              message = 'You have arrived at a cute little house in the woods.';
+              decision1 = 'Walk around Back';
+              decision2 = 'Knock on Door';
+            } else {
+              curScene = 3;
+              message = 'You are standing on the bridge overlooking a peaceful stream.';
+              decision1 = 'Walk across Bridge';
+              decision2 = 'Gaze into Stream';
+            }
+            break;
+          case 2:
+            if (decision == 1) {
+              curScene = 4;
+              message = 'Peeking through the window, you see a witch inside the house.';
+              decision1 = 'Sneak by Window';
+              decision2 = 'Wave at Witch';
+            } else {
+              curScene = 5;
+              message = 'Sorry, a witch lives in the house and you just became part of her stew.';
+              decision1 = 'Start Over';
+              decision2 = '';
+
+              // 두번째선택을 숨긴다.
+              document.getElementById('decision2').style.visibility = 'hidden';
+            }
+            break;
+          case 3:
+            if (decision == 1) {
+              curScene = 6;
+              message =
+                'Sorry, a troll lives on the other side of the bridge and you just became his lunch.';
+              decision1 = 'Start Over';
+              decision2 = '';
+
+              // 두번째선택을 숨긴다.
+              document.getElementById('decision2').style.visibility = 'hidden';
+            } else {
+              curScene = 7;
+              message = 'Your stare is interrupted by the arrival of a huge troll.';
+              decision1 = 'Say Hello to Troll';
+              decision2 = 'Jump into Stream';
+            }
+            break;
+          case 4:
+            if (decision == 1) {
+              curScene = 8;
+              decision1 = '?';
+              decision2 = '?';
+              document.getElementById('decision2').style.visibility = 'hidden';
+            } else {
+              curScene = 5;
+              message = "Sorry, you became part of the witch's stew.";
+              decision1 = 'Start Over';
+              decision2 = '';
+
+              // 두번째선택을 숨긴다.
+              document.getElementById('decision2').style.visibility = 'hidden';
+            }
+            break;
+          case 5:
+            curScene = 0;
+            decision1 = 'Start Game';
+            decision2 = '';
+            break;
+          case 6:
+            curScene = 0;
+            decision1 = 'Start Game';
+            decision2 = '';
+            break;
+          case 7:
+            if (decision == 1) {
+              curScene = 6;
+              message = "Sorry, you became the troll's tasty lunch.";
+              decision1 = 'Start Over';
+              decision2 = '';
+
+              // 두번째 선택 버튼을 숨긴다.
+              document.getElementById('decision2').style.visibility = 'hidden';
+            } else {
+              curScene = 9;
+              decision1 = '?';
+              decision2 = '?';
+              document.getElementById('decision2').style.visibility = 'hidden';
+            }
+            break;
+          case 8:
+            // TO BE CONTINUED
+            break;
+          case 9:
+            // TO BE CONTINUED
+            break;
+        }
+
+        // 장면 이미지 갱신
+        document.getElementById('sceneimg').src = './img/scene' + curScene + '.png';
+
+        // 장면 설명 텍스트를 갱신
+        /*  const sceneText = document.getElementById('scenetext');
+        while (sceneText.firstChild) {
+          sceneText.removeChild(sceneText.firstChild);
+        }
+        sceneText.appendChild(document.createTextNode(message)); */
+        replaceNodeText('scenetext', message);
+        replaceNodeText('decision1', decision1);
+        replaceNodeText('decision2', decision2);
+      }
+
+      // 의사결정 선택 기록 갱신
+      const historyText = document.getElementById('historyText');
+      console.log(historyText);
+      if (curScene != 0) {
+        // 가장 최근의 의삭ㄹ정 선택 기록 추가
+        const decisionElem = document.createElement('p');
+        decisionElem.appendChild(
+          document.createTextNode(
+            'Decision ' + decision + ' -> Scene ' + curScene + ' : ' + message
+          )
+        );
+        historyText.appendChild(decisionElem);
+      } else {
+        // 의사결정 선택 기록 지움
+        while (historyText.firstChild) historyText.removeChild(historyText.firstChild);
+      }
+    </script>
+  </head>
+  <body>
+    <!-- <div style="margin-top: 100px; text-align: center">
+      <img id="sceneimg" src="./img/scene0.png" alt="Stick Figure Adventure" /><br />
+      <div id="scenetext"></div>
+      <br />
+      Please choose:
+      <input type="button" id="decision1" value="1" onclick="changeScene(1)" />
+      <input type="button" id="decision2" value="2" onclick="changeScene(2)" />
+    </div> -->
+    <div style="margin-top: 100px; text-align: center">
+      <img id="sceneimg" src="./img/scene0.png" alt="Stick Figure Adventure" /><br />
+      <div id="scenetext"></div>
+      <br />
+      <span
+        id="decision1"
+        class="decision"
+        onclick="changeScene(1)"
+        onmouseover="this.className = 'decisionhover'"
+        onmouseout="this.className = 'decision'"
+        >Start Game</span
+      >
+      <span
+        id="decision2"
+        class="decision"
+        onclick="changeScene(2)"
+        onmouseover="this.className = 'decisionhover'"
+        onmouseout="this.className = 'decision'"
+        style="visibility: hidden"
+      ></span>
+      <div id="historyText" style="background-color: #eeeeee"></div>
+    </div>
+  </body>
+</html>
