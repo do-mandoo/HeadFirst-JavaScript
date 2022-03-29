@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/javascript" src="debug.js"></script>
+
+    <script type="text/javascript">
+      // 디버그 콘솔 전역 변수
+      let console;
+
+      // 전화가 걸려온 전체 수
+      let callNum = 0;
+
+      function checkWinner(form, caller, winningNum) {
+        //전화가 걸려온 수를 증가
+        ++callNum;
+
+        console.displayMsg('callNum: ' + callNum);
+
+        // 당첨자 체크
+        if (callNum == winningNum) {
+          alert(caller + ', caller number ' + callNum + "...today's winner!");
+          form.submit();
+        } else {
+          //다음 전화를 건 사람을 위해 caller 필드 초기화.
+          let callerField = document.getElementById('caller');
+          callerField.value = 'Next caller';
+          callerField.focus();
+          callerField.select();
+        }
+      }
+    </script>
+  </head>
+  <body onload="console = new DebugConsole();">
+    <form name="callform" action="radiocall.php" method="POST">
+      <img src="radio.png" alt="radio" />
+      Caller name: <input id="caller" name="caller" type="text" />
+      <input
+        type="button"
+        value="Call"
+        onclick="checkWinner(this.form, document.getElementById('caller').value, 7)"
+      />
+    </form>
+  </body>
+</html>
