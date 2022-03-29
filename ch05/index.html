@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      /* for (let i = 0; i < 5; i++) {
+        console.log(i);
+      } */
+      /* let count = prompt('Enter a number greater than 0:', '10');
+      if (count > 0) {
+        for (let i = count; i > 0; i--) {
+          alert('Starting in ... ' + i);
+          console.log('Starting in ... ' + i);
+        }
+        alert('필름 감아!');
+      } else {
+        alert("The number wasn't greater than 0. No movie for you!");
+      } */
+      const seats = [
+        [false, true, false, true, true, true, false, true, false],
+        [false, true, false, false, true, false, true, true, true],
+        [true, true, true, true, true, true, false, true, false],
+        [true, true, true, false, true, false, false, true, false],
+      ];
+
+      // 선택되지 않은 상태를 가리킨다. 아직 아무 좌석도 선택되지 않았음을 의ㅣㅁ한다.
+      let selSeat = -1;
+
+      function initSeats() {
+        // 모든 좌석 이미지를 초기화
+        /* for (let i = 0; i < seats.length; i++) {
+          if (seats[i]) {
+            // 좌석을 사용 가능으로 설정
+            // alert('Seat' + i + 'is available');
+            document.getElementById('seat' + i).src = './img/seat_avail.png';
+            document.getElementById('seat' + i).alt = 'Available seat';
+          } else {
+            // 좌석을 사용 불가로 설정
+            // alert('Seat' + i + 'is not available');
+            document.getElementById('seat' + i).src = './img/seat_unavail.png';
+            document.getElementById('seat' + i).alt = 'Unavailable seat';
+          }
+        } */
+        // 여러 줄의 좌석일 때
+        for (let i = 0; i < seats.length; i++) {
+          for (let j = 0; j < seats[i].length; j++) {
+            if (seats[i][j]) {
+              // 좌석을 사용 가능으로 설정
+              // alert('Seat' + i + 'is available');
+              document.getElementById('seat' + (i * seats[i].length + j)).src =
+                './img/seat_avail.png';
+              document.getElementById('seat' + (i * seats[i].length + j)).alt = 'Available seat';
+            } else {
+              // 좌석을 사용 불가로 설정
+              // alert('Seat' + i + 'is not available');
+              document.getElementById('seat' + (i * seats[i].length + j)).src =
+                './img/seat_unavail.png';
+              document.getElementById('seat' + (i * seats[i].length + j)).alt = 'Unavailable seat';
+            }
+          }
+        }
+      }
+
+      function findSeat() {
+        // 좌석이 이미 선택되었다면, 모든 좌석을 다시 초기화
+        if (selSeat >= 0) {
+          selSeat = -1;
+          initSeats();
+        }
+        // 사용 가능한 모든 좌석을 검색
+        /* for (let i = 0; i < seats.length; i++) {
+          // 현재 좌석이 사용가능한지 체크
+          if (seats[i] && seats[i + 1] && seats[i + 2]) {
+            // 연속된 세 좌석이 비어있는지.
+
+            selSeat = i;
+            document.getElementById('seat' + i).src = './img/seat_select.png';
+            document.getElementById('seat' + i).alt = 'Your seat';
+            document.getElementById('seat' + (i + 1)).src = './img/seat_select.png';
+            document.getElementById('seat' + (i + 1)).alt = 'Your seat';
+            document.getElementById('seat' + (i + 2)).src = './img/seat_select.png';
+            document.getElementById('seat' + (i + 2)).alt = 'Your seat';
+            // 사용자가 현재 좌석을 수락할 것인지를 묻기 위해 창을 띄움
+            const accept = confirm(
+              'Seats ' + (i + 1) + ' through ' + (i + 3) + ' are available. Accept?'
+            );
+            // confirm()함수는 사용자에게 예/아니오 로 답변할것을 요구하고, true(예)/false(아니오)를 반환한다.
+            if (accept) {
+              break;
+            } else {
+              // 사용자가 현재 좌석을 거부하면, 좌석을 선택하지 않고 계속 검색
+              selSeat = -1;
+              document.getElementById('seat' + i).src = './img/seat_avail.png';
+              document.getElementById('seat' + i).alt = 'Available seat';
+              document.getElementById('seat' + (i + 1)).src = './img/seat_avail.png';
+              document.getElementById('seat' + (i + 1)).alt = 'Available seat';
+              document.getElementById('seat' + (i + 2)).src = './img/seat_avail.png';
+              document.getElementById('seat' + (i + 2)).alt = 'Available seat';
+            }
+          }
+        } */
+        let i = 0;
+        let finished = false;
+        console.log(seats.length);
+        while (i < seats.length && !finished) {
+          // ! 여러줄의 좌석일 때 for반복문 필요
+          for (let j = 0; j < seats[i].length; j++) {
+            // 현재 좌석과 다음의 두 좌석이 사용 가능한지 체크
+            if (seats[i][j] && seats[i][j + 1] && seats[i][j + 2]) {
+              selSeat = i * seats[i].length + j;
+              document.getElementById('seat' + (i * seats[i].length + j)).src =
+                './img/seat_select.png';
+              document.getElementById('seat' + (i * seats[i].length + j)).alt = 'Your seat';
+              document.getElementById('seat' + (i * seats[i].length + j + 1)).src =
+                './img/seat_select.png';
+              document.getElementById('seat' + (i * seats[i].length + j + 1)).alt = 'Your seat';
+              document.getElementById('seat' + (i * seats[i].length + j + 2)).src =
+                './img/seat_select.png';
+              document.getElementById('seat' + (i * seats[i].length + j + 2)).alt = 'Your seat';
+              // 사용자가 현재 좌석을 수락할 것인지를 묻기 위해 창을 띄움
+              /* const accept = confirm(
+                'Seats ' + (i + 1) + ' through ' + (i + 3) + ' are available. Accept?'
+              ); */
+              // ! 여러줄일때
+              const accept = confirm(
+                'Seats ' +
+                  (j + 1) +
+                  ' through ' +
+                  (j + 3) +
+                  ' in Row ' +
+                  (i + 1) +
+                  ' are available. Accept?'
+              );
+              // confirm()함수는 사용자에게 예/아니오 로 답변할것을 요구하고, true(예)/false(아니오)를 반환한다.
+              if (accept) {
+                finished = true;
+              } else {
+                // 사용자가 현재 좌석을 거부하면, 좌석을 선택하지 않고 계속 검색
+                selSeat = -1;
+                document.getElementById('seat' + (i * seats[i].length + j)).src =
+                  './img/seat_avail.png';
+                document.getElementById('seat' + (i * seats[i].length + j)).alt = 'Available seat';
+                document.getElementById('seat' + (i * seats[i].length + j + 1)).src =
+                  './img/seat_avail.png';
+                document.getElementById('seat' + (i * seats[i].length + j + 1)).alt =
+                  'Available seat';
+                document.getElementById('seat' + (i * seats[i].length + j + 2)).src =
+                  './img/seat_avail.png';
+                document.getElementById('seat' + (i * seats[i].length + j + 2)).alt =
+                  'Available seat';
+              }
+            }
+            /* // 현재 좌석과 다음의 두 좌석이 사용 가능한지 체크
+          if (seats[i] && seats[i + 1] && seats[i + 2]) {
+            selSeat = i;
+            document.getElementById('seat' + i).src = './img/seat_select.png';
+            document.getElementById('seat' + i).alt = 'Your seat';
+            document.getElementById('seat' + (i + 1)).src = './img/seat_select.png';
+            document.getElementById('seat' + (i + 1)).alt = 'Your seat';
+            document.getElementById('seat' + (i + 2)).src = './img/seat_select.png';
+            document.getElementById('seat' + (i + 2)).alt = 'Your seat';
+            // 사용자가 현재 좌석을 수락할 것인지를 묻기 위해 창을 띄움
+            const accept = confirm(
+              'Seats ' + (i + 1) + ' through ' + (i + 3) + ' are available. Accept?'
+            );
+            // confirm()함수는 사용자에게 예/아니오 로 답변할것을 요구하고, true(예)/false(아니오)를 반환한다.
+            if (accept) {
+              finished = true;
+            } else {
+              // 사용자가 현재 좌석을 거부하면, 좌석을 선택하지 않고 계속 검색
+              selSeat = -1;
+              document.getElementById('seat' + i).src = './img/seat_avail.png';
+              document.getElementById('seat' + i).alt = 'Available seat';
+              document.getElementById('seat' + (i + 1)).src = './img/seat_avail.png';
+              document.getElementById('seat' + (i + 1)).alt = 'Available seat';
+              document.getElementById('seat' + (i + 2)).src = './img/seat_avail.png';
+              document.getElementById('seat' + (i + 2)).alt = 'Available seat';
+            } */
+          }
+          // 루프 카운터를 증가시킴
+          i++;
+        }
+      }
+    </script>
+  </head>
+  <body onload="initSeats()">
+    <div style="margin-top: 75px; text-align: center">
+      <img id="seat0" src="" alt="" />
+      <img id="seat1" src="" alt="" />
+      <img id="seat2" src="" alt="" />
+      <img id="seat3" src="" alt="" />
+      <img id="seat4" src="" alt="" />
+      <img id="seat5" src="" alt="" />
+      <img id="seat6" src="" alt="" />
+      <img id="seat7" src="" alt="" />
+      <img id="seat8" src="" alt="" /><br />
+      <img id="seat9" src="" alt="" />
+      <img id="seat10" src="" alt="" />
+      <img id="seat11" src="" alt="" />
+      <img id="seat12" src="" alt="" />
+      <img id="seat13" src="" alt="" />
+      <img id="seat14" src="" alt="" />
+      <img id="seat15" src="" alt="" />
+      <img id="seat16" src="" alt="" />
+      <img id="seat17" src="" alt="" /><br />
+      <img id="seat18" src="" alt="" />
+      <img id="seat19" src="" alt="" />
+      <img id="seat20" src="" alt="" />
+      <img id="seat21" src="" alt="" />
+      <img id="seat22" src="" alt="" />
+      <img id="seat23" src="" alt="" />
+      <img id="seat24" src="" alt="" />
+      <img id="seat25" src="" alt="" />
+      <img id="seat26" src="" alt="" /><br />
+      <img id="seat27" src="" alt="" />
+      <img id="seat28" src="" alt="" />
+      <img id="seat29" src="" alt="" />
+      <img id="seat30" src="" alt="" />
+      <img id="seat31" src="" alt="" />
+      <img id="seat32" src="" alt="" />
+      <img id="seat33" src="" alt="" />
+      <img id="seat34" src="" alt="" />
+      <img id="seat35" src="" alt="" /><br />
+      <input type="button" id="findseat" value="Find Seat" onclick="findSeat();" />
+    </div>
+  </body>
+</html>
