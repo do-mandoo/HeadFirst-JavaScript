@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      // 현재 장면 번호를 0(소개 장면)으로 초기화
+      let curScene = 0;
+      function changeScence(options) {
+        // 장면 설명 내용을 삭제
+        let message = '';
+        /* if (curScene == 0) {
+          curScene = 1;
+          message = 'Your journey begins at a fork in the road.';
+        } else if (curScene == 1) {
+          if (options == 1) {
+            curScene = 2;
+            message = 'You have arrived at a cute little house in the woods.';
+          } else {
+            curScene = 3;
+            message = 'You are standing on the bridge overlooking a peaceful stream.';
+          }
+        } else if (curScene == 2) {
+          if (options == 1) {
+            curScene = 4;
+            message = 'Peeking through the window, you see a witch inside the house.';
+          } else {
+            curScene = 5;
+            message = 'Sorry, a witch lives in the house and you just became part of her stew.';
+          }
+        } else if (curScene == 3) {
+          if (options == 1) {
+            curScene = 6;
+            message =
+              'Sorry, a troll lives on the other side of the bridge and you just became his lunch.';
+          } else {
+            curScene = 7;
+            message = 'Your stare is interrupted by the arrival of a huge troll.';
+          }
+        } else if (curScene == 4) {
+          if (options == 1) {
+            curScene = 8;
+          } else {
+            curScene = 5;
+            message = "Sorry, you became part of the witch's stew.";
+          }
+        } else if (curScene == 5) {
+          curScene = 0;
+        } else if (curScene == 6) {
+          curScene = 0;
+        } else if (curScene == 7) {
+          if (options == 1) {
+            curScene = 6;
+            message = "Sorry, you became the troll's tasty lunch.";
+          } else {
+            curScene = 9;
+          }
+        } else if (curScene == 8) {
+          // 다음에 계속
+        } else if (curScene == 9) {
+          // 다음에 계속
+        } */
+
+        switch (curScene) {
+          case 0:
+            curScene = 1;
+            message = 'Your journey begins at a fork in the road.';
+            break;
+          case 1:
+            if (options == 1) {
+              curScene = 2;
+              message = 'You have arrived at a cute little house in the woods.';
+            } else {
+              curScene = 3;
+              message = 'You are standing on the bridge overlooking a peaceful stream.';
+            }
+            break;
+          case 2:
+            if (options == 1) {
+              curScene = 4;
+              message = 'Peeking through the window, you see a witch inside the house.';
+            } else {
+              curScene = 5;
+              message = 'Sorry, a witch lives in the house and you just became part of her stew.';
+            }
+            break;
+          case 3:
+            if (options == 1) {
+              curScene = 6;
+              message =
+                'Sorry, a troll lives on the other side of the bridge and you just became his lunch.';
+            } else {
+              curScene = 7;
+              message = 'Your stare is interrupted by the arrival of a huge troll.';
+            }
+            break;
+          case 4:
+            if (options == 1) {
+              curScene = 8;
+            } else {
+              curScene = 5;
+              message = "Sorry, you became part of the witch's stew.";
+            }
+            break;
+          case 5:
+            curScene = 0;
+            break;
+          case 6:
+            curScene = 0;
+            break;
+          case 7:
+            if (options == 1) {
+              curScene = 6;
+              message = "Sorry, you became the troll's tasty lunch.";
+            } else {
+              curScene = 9;
+            }
+            break;
+          case 8:
+            // TO BE CONTINUED
+            break;
+          case 9:
+            // TO BE CONTINUED
+            break;
+        }
+
+        document.getElementById('sceneimg').src = './images/scene' + curScene + '.png';
+        if (message !== '') {
+          alert(message);
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div style="margin-top: 100px; text-align: center">
+      <img id="sceneimg" src="./images/scene0.png" alt="Stick Figure Adventure" />
+      <br />
+      Please choose
+      <input type="button" id="options1" onclick="changeScence(1)" value="1" />
+      <input type="button" id="options2" onclick="changeScence(2)" value="2" />
+    </div>
+  </body>
+</html>
