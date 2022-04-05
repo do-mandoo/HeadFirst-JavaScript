@@ -5,12 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script type="text/javascript" src="jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="debug.js"></script>
     <script type="text/javascript" src="ajax.js"></script>
     <script type="text/javascript" src="date.js"></script>
 
     <script type="text/javascript">
       // Global Ajax request
-      var ajaxReq = new AjaxRequest();
+      const ajaxReq = new AjaxRequest();
 
       // Ajax를 사용하여 서버의 XML 문서에 새 블로그 항목 추가.
       function addBlogEntry() {
@@ -19,6 +21,7 @@
         document.getElementById('status').innerHTML = 'Adding...';
 
         // Ajax 요청으로 새로운 블로그 항목을 전송
+        console.log('1번');
         ajaxReq.send(
           'POST',
           'addblogentry.php',
@@ -31,15 +34,18 @@
             '&image=' +
             document.getElementById('image').value
         );
+        console.log('2번');
       }
 
       // Ajax요청을 처리.
       function handleRequest() {
+        console.log('3번');
         if (ajaxReq.getReadyState() == 4 && ajaxReq.getStatus() == 200) {
           // Add버튼을 활성화하고 상태를 초기화
+          console.log('4번');
           document.getElementById('add').disabled = false;
           document.getElementById('status').innerHTML = '';
-
+          console.log('5번');
           // 블로그 항목이 추가된 것을 확인
           alert('The new blog entry was successfully added.');
         }
@@ -47,6 +53,7 @@
 
       // 블로그 폼 전체 초기화
       function initForm() {
+        console.log('4번');
         document.getElementById('date').value = new Date().shortFormat();
         document.getElementById('body').focus();
       }
